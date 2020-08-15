@@ -99,6 +99,7 @@ function direction(e){
 						tail -= 20
 					}
 					snake.push(tail);
+					ifmiss(snake[0]);
 					document.getElementById("id"+snake[snake.length-1]).style.backgroundColor=snakeColor
 					document.getElementById("id"+food).innerHTML = ""
 					socer += 100
@@ -119,7 +120,7 @@ function direction(e){
 				}
 				document.getElementById("id"+snake[0]).innerHTML = "o"
 				document.getElementById("id"+snake[1]).innerHTML = ""
-				miss(snake[0]);
+				ifmiss(snake[0]);
 				fangxiang = 1;
 				break;
 			}
@@ -151,6 +152,7 @@ function direction(e){
 						tail -= 20
 					}
 					snake.push(tail);
+					ifmiss(snake[0]);
 					document.getElementById("id"+snake[snake.length-1]).style.backgroundColor=snakeColor
 					document.getElementById("id"+food).innerHTML = ""
 					socer += 100
@@ -171,7 +173,7 @@ function direction(e){
 				}
 				document.getElementById("id"+snake[0]).innerHTML = "o"
 				document.getElementById("id"+snake[1]).innerHTML = ""
-				miss(snake[0]);
+				ifmiss(snake[0]);
 				fangxiang = 2
 				break;
 			}
@@ -203,6 +205,7 @@ function direction(e){
 						tail -= 20
 					}
 					snake.push(tail);
+					ifmiss(snake[0]);
 					document.getElementById("id"+snake[snake.length-1]).style.backgroundColor=snakeColor
 					document.getElementById("id"+food).innerHTML = ""
 					socer += 100
@@ -223,7 +226,7 @@ function direction(e){
 				}
 				document.getElementById("id"+snake[0]).innerHTML = "o"
 				document.getElementById("id"+snake[1]).innerHTML = ""
-				miss(snake[0]);
+				ifmiss(snake[0]);
 				fangxiang = 3
 				break;
 			}
@@ -255,11 +258,10 @@ function direction(e){
 						tail -= 20
 					}
 					snake.push(tail);
+					ifmiss(snake[0]);	
 					document.getElementById("id"+snake[snake.length-1]).style.backgroundColor=snakeColor
 					document.getElementById("id"+food).innerHTML = ""
 					socer += 100
-					if(socer == 1700)
-						console.log(snake)
 					document.getElementsByClassName("socer")[0].innerHTML=socer
 					change()
 				}
@@ -277,7 +279,6 @@ function direction(e){
 				}
 				document.getElementById("id"+snake[0]).innerHTML = "o"
 				document.getElementById("id"+snake[1]).innerHTML = ""
-				miss(snake[0]);
 				fangxiang = 4;
 				break;
 			}
@@ -310,19 +311,36 @@ function direction(e){
 	}
 }
 //判断是否撞到自身
-function miss(head){
+function ifmiss(head){
+	if (snake[0] == snake[snake.length]+1) {
+			miss();
+	}
+	else if(snake[0] == snake[snake.length]-1){
+			console.log(snake)
+			miss();
+	}
+	else if(snake[0] == snake[snake.length]-20){
+			miss();
+	}
+	else if(snake[0] == snake[snake.length]+20){
+			miss();
+	}
 	for (var i = 1; i < snake.length; i++) {
 		if (head == snake[i]) {
-				document.getElementsByClassName("end")[0].style.display="block"
-				document.getElementsByClassName("endSocer")[0].innerHTML="得分："+socer;
-				document.getElementById("id"+snake[0]).innerHTML = ""
-				for(var i = 0;i < snake.length;i++){
-					document.getElementById("id"+snake[i]).style.backgroundColor=qipanColor
-				}
-				window.clearInterval(keep)
+			miss();
 			return;
 		};
 	}
+}
+//当撞上之后
+function miss(){
+	document.getElementsByClassName("end")[0].style.display="block"
+	document.getElementsByClassName("endSocer")[0].innerHTML="得分："+socer;
+	document.getElementById("id"+snake[0]).innerHTML = ""
+	for(var i = 0;i < snake.length;i++){
+		document.getElementById("id"+snake[i]).style.backgroundColor=qipanColor
+	}
+	window.clearInterval(keep)
 }
 //点击确定重新开始
 function newgame(){
