@@ -12,8 +12,11 @@ var keep;
 var snakeColor = 'red';
 //棋盘的颜色
 var qipanColor = 'yellow';
+//开局的速度
+var speed;
+
 //开局调用自执行函数，来生成第一个小点
-(function () {
+function main() {
 	//创建400个小元素，id自增加1
 　　　　var qipan = document.getElementById("qipan");
 		qipan.style.backgroundColor = qipanColor
@@ -32,10 +35,33 @@ var qipanColor = 'yellow';
 	change();
 	//蛇身颜色渲染
 	color();
-	keep = setInterval(function(){direction("s")},200-snake.length);
+	//进行向下运动
+	keep = setInterval(function(){direction("s")},speed-snake.length);
+	//背景变换色
 	bgc()
-})();
-
+}
+//选择难度
+function choose(e){
+	if(e == 1){
+		speed = 300;
+	}else if(e == 2){
+		speed = 250
+	}else if(e == 3){
+		speed = 200
+	}
+	//播放背景音乐
+	var music = document.getElementById("music")
+	music.src = "bgc1.mp3";
+	if (music.paused) { 
+        music.paused = false;
+        music.play(); 
+    }
+    document.getElementsByClassName("navbar")[0].style.display="none"
+    document.getElementsByClassName("choose")[0].style.display="none"
+    document.getElementsByClassName("main")[0].style.display="block";
+    //调用主要初始化
+    main()
+}
 //蛇的颜色控制
 function color(){
 	for(var i = 0;i < snake.length;i++){
@@ -73,7 +99,6 @@ function direction(e){
 						tail -= 20
 					}
 					snake.push(tail);
-					console.log(snake)
 					document.getElementById("id"+snake[snake.length-1]).style.backgroundColor=snakeColor
 					document.getElementById("id"+food).innerHTML = ""
 					socer += 100
@@ -126,7 +151,6 @@ function direction(e){
 						tail -= 20
 					}
 					snake.push(tail);
-					console.log(snake)
 					document.getElementById("id"+snake[snake.length-1]).style.backgroundColor=snakeColor
 					document.getElementById("id"+food).innerHTML = ""
 					socer += 100
@@ -179,7 +203,6 @@ function direction(e){
 						tail -= 20
 					}
 					snake.push(tail);
-					console.log(snake)
 					document.getElementById("id"+snake[snake.length-1]).style.backgroundColor=snakeColor
 					document.getElementById("id"+food).innerHTML = ""
 					socer += 100
@@ -232,10 +255,11 @@ function direction(e){
 						tail -= 20
 					}
 					snake.push(tail);
-					console.log(snake)
 					document.getElementById("id"+snake[snake.length-1]).style.backgroundColor=snakeColor
 					document.getElementById("id"+food).innerHTML = ""
 					socer += 100
+					if(socer == 1700)
+						console.log(snake)
 					document.getElementsByClassName("socer")[0].innerHTML=socer
 					change()
 				}
@@ -261,33 +285,64 @@ function direction(e){
 				direction("a");
 				break;
 			}
+		case "p":
+				clearInterval(keep);
+				break;
+		default:
+			switch(fangxiang){
+				case 1:
+					window.clearInterval(keep)
+					keep = setInterval(function(){direction("w")},speed-snake.length);
+					break;
+				case 2:
+					window.clearInterval(keep)
+					keep = setInterval(function(){direction("s")},speed-snake.length);
+					break;
+				case 3:
+					window.clearInterval(keep)
+					keep = setInterval(function(){direction("a")},speed-snake.length);
+					break;
+				case 4:
+					window.clearInterval(keep)
+					keep = setInterval(function(){direction("d")},speed-snake.length);
+					break;
+			}
 	}
 }
 //判断是否撞到自身
 function miss(head){
 	for (var i = 1; i < snake.length; i++) {
 		if (head == snake[i]) {
-			alert("游戏结束！当前分值"+socer);
-			document.getElementById("id"+snake[0]).innerHTML = ""
-			for(var i = 0;i < snake.length;i++){
-				document.getElementById("id"+snake[i]).style.backgroundColor=qipanColor
-			}
-			socer = 0;
-			snake = [40,20,0];
-			window.clearInterval(keep)
-			keep = setInterval(function(){direction("s")},200-snake.length);
-			document.getElementsByClassName("socer")[0].innerHTML=socer
-			color();
+				document.getElementsByClassName("end")[0].style.display="block"
+				document.getElementsByClassName("endSocer")[0].innerHTML="得分："+socer;
+				document.getElementById("id"+snake[0]).innerHTML = ""
+				for(var i = 0;i < snake.length;i++){
+					document.getElementById("id"+snake[i]).style.backgroundColor=qipanColor
+				}
+				window.clearInterval(keep)
+			return;
 		};
 	}
+}
+//点击确定重新开始
+function newgame(){
+	document.getElementsByClassName("end")[0].style.display="none";
+	socer = 0;
+	fangxiang = 2;
+	snake = [40,20,0];
+	keep = setInterval(function(){direction("s")},speed-snake.length);
+	document.getElementsByClassName("socer")[0].innerHTML=socer
+	color();
 }
 //直线行驶
 var dir = document.getElementById("body");
 dir.onkeydown = line;
+var key
 function line(event){
-	var temp = event.key;
+	if (key == event.key) return;
+	    key = event.key;
 	window.clearInterval(keep)
-	keep = setInterval(function(){direction(temp)},200-snake.length);
+	keep = setInterval(function(){direction(key)},speed-snake.length);
 }
 //产生随机小点函数
 function change(){

@@ -6,12 +6,34 @@
 	<link rel="stylesheet" href="贪吃蛇.css">
 </head>
 <body id="body">
-	<div id="socer">
-		<h2>当前分值:</h2>
-		<div class="socer"></div>
+<!--标题-->
+	<div class="navbar">
+		<img src="logo.jpg" alt="">
 	</div>
-	<div id="qipan">
+<!--选择难度-->
+	<div class="choose">
+		<div onclick="choose(1)">初级</div>
+		<div onclick="choose(2)">中级</div>
+		<div onclick="choose(3)">高级</div>
 	</div>
+	<div class="main" style="display:none">
+	<!--定义分值-->
+		<div id="socer">
+			<h2>当前分值:</h2>
+			<div class="socer"></div>
+		</div>
+	<!--游戏棋盘-->
+		<div id="qipan">
+		</div>
+	</div>
+<!--游戏结束-->
+	<div class="end" style="display: none">
+		<div>Game Over !!!</div>
+		<div class="endSocer"></div>
+		<div onclick="newgame()">重新开始</div>
+	</div>
+<!--定义音乐-->
+	<audio src="bg2.mp3" allow="autoplay" id="music" loop ></audio>
 <script src="贪吃蛇.js"></script>
 </body>
 </html>
